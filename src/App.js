@@ -1,69 +1,30 @@
 import React, { Component } from 'react';
-import {
-    ReactiveBase,
-    CategorySearch,
-    SingleRange,
-    ResultCard,
-    ReactiveList,
-} from '@appbaseio/reactivesearch';
+import CardList from './components/CardList/CardList';
+import Search from './components/Search/Search';
+import data from './components/data';
 
 class App extends Component {
-    render() {
-        return (
-            <ReactiveBase
-                app="carstore-dataset"
-                credentials="4HWI27QmA:58c731f7-79ab-4f55-a590-7e15c7e36721"
-            >
-                <CategorySearch
-                    componentId="searchbox"
-                    dataField="model"
-                    categoryField="brand.keyword"
-                    placeholder="Search for cars"
-                />
-                <SingleRange
-                    componentId="ratingsfilter"
-                    title="Filter by ratings"
-                    dataField="rating"
-                    data={[
-                        { start: '4', end: '5', label: '4 stars and up' },
-                        { start: '3', end: '5', label: '3 stars and up' },
-                        { start: '2', end: '5', label: '2 stars and up' },
-                        { start: '1', end: '5', label: 'see all ratings' },
-                    ]}
-                    defaultValue="4 stars and up"
-                />
-                <ReactiveList
-                    componentId="result"
-                    title="Results"
-                    dataField="model"
-                    from={0}
-                    size={5}
-                    pagination={true}
-                    react={{
-                        and: ['searchbox', 'ratingsfilter'],
-                    }}
-                    render={({ data }) => (
-                        <ReactiveList.ResultCardsWrapper>
-                            {data.map(item => (
-                                <ResultCard key={item._id}>
-                                    <ResultCard.Image src="https://bit.do/demoimg" />
-                                    <ResultCard.Title
-                                        dangerouslySetInnerHTML={{
-                                            __html: item.model,
-                                        }}
-                                    />
-                                    <ResultCard.Description>
-                                        {item.brand + ' ' + '*'.repeat(item.rating)}
-                                    </ResultCard.Description>
-                                </ResultCard>
-                            ))}
-                        </ReactiveList.ResultCardsWrapper>
-                    )}
-                />
-            </ReactiveBase>
-        );
-    }
+  state = {
+    data,
+    input: ''
+  };
+
+  inputChangeHandler = e => {
+    this.setState({input: e.target.value})
+  };
+
+  render() {
+    const filterBand = this.state.data.filter(bandSearched => {
+      return bandSearched.name.toLowerCase().includes(this.state.input.toLowerCase());
+    });
+    return (
+      <div className="App">
+        <h1 className="title">Find it.</h1>
+        <Search searchChange={this.inputChangeHandler} />
+        <CardList data={filterBand} />
+      </div>
+    );
+  }
 }
 
 export default App;
-
