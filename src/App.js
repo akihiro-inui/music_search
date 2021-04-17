@@ -1,30 +1,18 @@
 import React, { Component } from 'react';
-import CardList from './components/CardList/CardList';
-import Search from './components/Search/Search';
-import data from './components/data';
+import { ReactiveBase } from '@appbaseio/reactivesearch';
 
 class App extends Component {
-  state = {
-    data,
-    input: ''
-  };
 
-  inputChangeHandler = e => {
-    this.setState({input: e.target.value})
-  };
-
-  render() {
-    const filterBand = this.state.data.filter(bandSearched => {
-      return bandSearched.name.toLowerCase().includes(this.state.input.toLowerCase());
-    });
-    return (
-      <div className="App">
-        <h1 className="title">Find it.</h1>
-        <Search searchChange={this.inputChangeHandler} />
-        <CardList data={filterBand} />
-      </div>
-    );
-  }
+	render() {
+		return (
+			<ReactiveBase
+				app="carstore-dataset"
+				credentials="4HWI27QmA:58c731f7-79ab-4f55-a590-7e15c7e36721">
+				// other components will go here.
+				<div>
+					Hello ReactiveSearch!
+				</div>
+			</ReactiveBase>
+		);
+	}
 }
-
-export default App;
