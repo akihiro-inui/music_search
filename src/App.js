@@ -1,19 +1,37 @@
 import React, { Component } from 'react';
-import { ReactiveBase } from '@appbaseio/reactivesearch';
-
+import { ReactiveBase, DataSearch, ResultList, SelectedFilters } from '@appbaseio/reactivesearch';
+import './App.css';
 class App extends Component {
-
-	render() {
-		return (
-			<ReactiveBase
-				app="carstore-dataset"
-				credentials="4HWI27QmA:58c731f7-79ab-4f55-a590-7e15c7e36721">
-				// other components will go here.
-				<div>
-					Hello ReactiveSearch!
-				</div>
-			</ReactiveBase>
-		);
-	}
+  render() {
+    return (
+      <div className="main-container">
+        <ReactiveBase
+          app="steam-search"
+          url="http://IP_ADDRESS:9200"
+        >
+          <DataSearch
+            componentId="title"
+            dataField={["ResponseName"]}
+            queryFormat="and"
+          />
+          <SelectedFilters />
+          <ResultList
+            componentId="resultLists"
+            dataField="ResponseName"           
+            size={10}
+            pagination={true}
+            react={{
+              "and": ["title"]
+            }}
+            onData={(res) => {
+              return {
+                title: res.ResponseName,
+              }
+            }}
+          />
+        </ReactiveBase>
+      </div >
+    );
+  }
 }
 export default App;
